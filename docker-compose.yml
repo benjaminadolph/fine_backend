@@ -1,0 +1,25 @@
+version: '3'
+services:
+  server:
+    container_name: backend
+    build:
+        context: .
+    depends_on:
+      - mongo
+    volumes:
+    - ".:/backend"
+    - "/backend/node_modules"
+    restart: always
+    ports:
+    - "3000:3000"
+    external_links:
+    - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./_mongodb_data:/data/db"
+      
