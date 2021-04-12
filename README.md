@@ -8,7 +8,7 @@ fine_app
 ├── fine_frontend
 ```
 
-# BACKEND SPECIFIC: START DOCKER WITH VUE-FRONTEND, NODE.JS-SERVER AND MONGODB
+# BACKEND SPECIFIC: START DOCKER WITH NODE.JS-SERVER AND MONGODB
 The Project is automatically set up when you build the docker containers.
 
 ## Build Containers
