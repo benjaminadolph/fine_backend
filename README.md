@@ -12,15 +12,15 @@ fine_app
 The Project is automatically set up when you build the docker containers.
 
 ## Build Containers
--> inside the fine_app-Folder
+-> inside the fine_backend-Folder
 `docker compose build`
 
 ## Run Containers in Docker
--> inside the fine_app-Folder
+-> inside the fine_backend-Folder
 `docker compose up`
 
 ## Tear down Containers in Docker
--> inside the fine_app-Folder
+-> inside the fine_backend-Folder
 `docker compose down`
 
 ## To be able to edit files, add volume to compose file
