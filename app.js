@@ -3,15 +3,17 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const path = require('path')
-require('dotenv/config')
+const dotenv = require('dotenv') 
+dotenv.config()
 
 //Import Routes
 const postsRoute = require('./routes/posts')
+const authRoute = require('./routes/auth')
 
 //CONNECT TO DB
 mongoose.Promise = global.Promise;
-// use process.env.DB_CONNECTION instead of 'mongodb://mongo:27017/node-server' when using a mongodb hostet on a server e.g. MongoDB Atlas and change the Link in .env-File
-mongoose.connect('mongodb://mongo:27017/fine', {useNewUrlParser: true, useUnifiedTopology: true })
+// use process.env.DB_CONNECTION instead of 'mongodb://user1:test123@mongo:27017/fine_mongodb' when using a mongodb hostet on a server e.g. MongoDB Atlas and change the Link in .env-File
+mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Database connected sucessfully !')
     },
@@ -23,14 +25,16 @@ mongoose.connect('mongodb://mongo:27017/fine', {useNewUrlParser: true, useUnifie
 //Execute Express
 const app = express()
 
-//MIDDLEWARE
+//MIDDLEWARE 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, '/public/')));
 
+//ROUTES MIDDLEWARE
 // function that executes when routes are being hit e.g. the Homepage "/"
 app.use('/posts', postsRoute)
+app.use('/api/user', authRoute)
 
 app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'));

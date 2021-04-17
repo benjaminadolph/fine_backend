@@ -1,10 +1,13 @@
 const { response } = require('express')
 const express = require('express')
 const Post = require('../models/Post')
+const verify = require('./verifyToken')
 
 const router = express.Router()
 
 //Gets back all the Posts
+//Private route 
+    //router.get('/', verify, async (req,res) => {
 router.get('/', async (req,res) => {
     try{
         const posts = await Post.find()
