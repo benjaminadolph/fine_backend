@@ -7,11 +7,11 @@ services:
     depends_on:
       - mongo
     volumes:
-    - ".:/backend"
-    - "/backend/node_modules"
+    - '.:/backend'
+    - '/backend/node_modules'
     restart: always
     ports:
-    - "3000:3000"
+    - '3000:3000'
     external_links:
     - mongo
 
@@ -19,7 +19,12 @@ services:
     container_name: mongo
     image: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
+    environment: 
+      - MONGO_INITDB_DATABASE=fine_mongodb
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=test123
     volumes:
-      - "./_mongodb_data:/data/db"
+      - './mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro'
+      - './_mongodb_data:/data/db'
       

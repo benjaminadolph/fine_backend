@@ -2,7 +2,7 @@
 FROM node:14.16-alpine
 
 # Set the working directory 
-WORKDIR /app
+WORKDIR /backend
 
 # copy package.json into the container 
 COPY package*.json ./
