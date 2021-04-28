@@ -28,7 +28,7 @@ volumes: ['./:/usr/src/app']
 
 # BACKEND SPECIFIC: START NODE.JS-SERVER WITH REMOTE DATABASE (E.G. MONGODB ATLAS)
 
-IMPORTANT: change link from 'mongodb://user1:test123@mongo:27017/fine_mongodb' to process.env.DB_CONNECTION in app.js in line 14 and set the correct variable in the .env-file to use e.g. MongoDB-Atlas
+IMPORTANT: change link from 'mongodb://user1:test123@mongo:27017/fine_mongodb' to process.env.DB_CONNECTION in app.js in line 14 and set the correct address in the .env-file to use e.g. MongoDB-Atlas
 ## Project setup 
 -> inside the fine_backend-Folder
 `npm install`
@@ -41,3 +41,10 @@ IMPORTANT: change link from 'mongodb://user1:test123@mongo:27017/fine_mongodb' t
 -> inside the fine_backend-Folder with nodemon
 `npm run dev`
 
+# ESLINT
+You can manually lint with `npm run lint`
+Lint specifications in detail: https://github.com/airbnb/javascript 
+
+## Autofix Problems, Style and Syntax with ESLINT 
+-> inside the fine_backend-Folder
+`npm run lint --fix`
