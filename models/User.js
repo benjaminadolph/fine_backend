@@ -7,7 +7,8 @@ const UserSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -17,7 +18,11 @@ const UserSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Post"
+    }]
 })
 
 module.exports = mongoose.model('User', UserSchema)

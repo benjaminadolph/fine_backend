@@ -1,6 +1,7 @@
 const { response } = require('express')
 const express = require('express')
 const Post = require('../models/Post')
+const User = require('../models/User')
 const verify = require('./verifyToken')
 
 const router = express.Router()
@@ -9,19 +10,13 @@ const router = express.Router()
 //Private route 
     //router.get('/', verify, async (req,res) => {
 router.get('/', async (req,res) => {
+    const userid = req.query.userid
     try{
-        const posts = await Post.find()
-        res.json(posts)
-    } catch(err) {
-        res.json(err)
-    }
-}) 
-
-//Gets back a specific Post
-router.get('/:postId', async (req,res) => {
-    try{
-        const specificPost = await Post.findById(req.params.postId)
-        res.json(specificPost)
+        User.findOne({ _id: userid })
+            .populate('posts')
+            .then((result) => {
+                res.json(result.posts);
+            })
     } catch(err) {
         res.json(err)
     }
@@ -31,12 +26,25 @@ router.get('/:postId', async (req,res) => {
 router.post('/', async (req,res) => {
     const post = new Post({
         title: req.body.title,
-        description: req.body.description
+        description: req.body.description,
+        userid: req.body.userid
     })
-
     try {
         const savedPost = await post.save()
-        res.json(savedPost)
+        User.findOne({ _id: post.userid }, (err, user) => {
+            if (user) {
+                // The below two lines will add the newly saved review's 
+                // ObjectID to the the User's reviews array field
+                user.posts.push(savedPost);
+                user.save();
+            }
+        });
+        res.json(savedPost);
+ /*        User.findOne({ _id: post.userid })
+            .populate('posts')
+            .then((result) => {
+                res.json(result.posts);
+        }); */
     } catch(err) {
         res.json(err)
     }
@@ -44,8 +52,14 @@ router.post('/', async (req,res) => {
 
 //Delete a specific Post
 router.delete('/:postId', async (req,res) => {
+    const postid = req.query.postid
+    const userid = req.query.userid
     try {
-        const removedPost = await Post.remove({_id: req.params.postId})
+        const removedPost = await Post.deleteOne({_id: postid})
+        const updatedUser = await User.updateOne(
+            {_id: userid}, 
+            { $pull: { posts: postid } }
+        )
         res.json(removedPost)
     } catch(err) {
         res.json(err)
@@ -53,7 +67,7 @@ router.delete('/:postId', async (req,res) => {
 })
 
 //Update a specific Post
-router.patch('/:postId', async (req,res) => {
+/* router.patch('/:postId', async (req,res) => {
     try {
         const updatedPost = await Post.updateOne(
             {_id: req.params.postId}, 
@@ -63,6 +77,16 @@ router.patch('/:postId', async (req,res) => {
     } catch(err) {
         res.json(err)
     }
-})
+}) */
+
+//Get back a specific Post
+/* router.get('/:postId', async (req,res) => {
+    try{
+        const specificPost = await Post.findById(req.params.postId)
+        res.json(specificPost)
+    } catch(err) {
+        res.json(err)
+    }
+})  */
 
 module.exports = router
