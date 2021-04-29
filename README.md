@@ -13,32 +13,38 @@ The Project is automatically set up when you build the docker containers.
 
 ## Build Containers
 -> inside the fine_backend-Folder
-`docker compose build`
+`docker-compose build`
 
 ## Run Containers in Docker
 -> inside the fine_backend-Folder
-`docker compose up`
+`docker-compose up`
 
 ## Tear down Containers in Docker
 -> inside the fine_backend-Folder
-`docker compose down`
+`docker-compose down`
 
 ## To be able to edit files, add volume to compose file
 volumes: ['./:/usr/src/app']
 
 # BACKEND SPECIFIC: START NODE.JS-SERVER WITH REMOTE DATABASE (E.G. MONGODB ATLAS)
 
-IMPORTANT: change link from docker-mongoDB to link to e.g. MongoDB-Atlas in app.js in line 14
-
+IMPORTANT: change link from 'mongodb://user1:test123@mongo:27017/fine_mongodb' to process.env.DB_CONNECTION in app.js in line 14 and set the correct address in the .env-file to use e.g. MongoDB-Atlas
 ## Project setup 
 -> inside the fine_backend-Folder
 `npm install`
 
 ## Start the Node-Server
--> inside the fine_backend-Folder with nodemon
+-> inside the fine_backend-Folder
 `npm run start`
 
 ## Start the Node-Server with hot-reloads for development
 -> inside the fine_backend-Folder with nodemon
 `npm run dev`
 
+# ESLINT
+You can manually lint with `npm run lint`
+Lint specifications in detail: https://github.com/airbnb/javascript 
+
+## Autofix Problems, Style and Syntax with ESLINT 
+-> inside the fine_backend-Folder
+`npm run lint --fix`
