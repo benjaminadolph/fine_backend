@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const verify = require('./verifyToken');
 
 const router = express.Router();
 const User = require('../models/User');
@@ -58,13 +59,13 @@ router.post('/login', async (req, res) => {
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
   // res.header('auth-token', token).send(token)
   res.json({
-    userid: user._id,
+    id: user._id,
     authtoken: token,
   });
 });
 
 // GETS BACK A SPECIFIC USER BY ID
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', verify, async (req, res) => {
   try {
     const specificUser = await User.findById(req.params.userId);
     res.json(specificUser);
