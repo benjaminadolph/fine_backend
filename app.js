@@ -10,6 +10,9 @@ dotenv.config();
 // Import Routes
 const postsRoute = require('./routes/posts');
 const authRoute = require('./routes/auth');
+const symptomCategoriesRoute = require('./routes/symptomCategories');
+const symptomsRoute = require('./routes/symptoms');
+const emotionsRoute = require('./routes/emotions');
 
 // CONNECT TO DB
 mongoose.Promise = global.Promise;
@@ -33,7 +36,10 @@ app.use(express.static(path.join(__dirname, '/public/')));
 
 // ROUTES MIDDLEWARE
 // function that executes when routes are being hit e.g. the Homepage "/"
-app.use('/posts', postsRoute);
+app.use('/api/symptomCategories', symptomCategoriesRoute);
+app.use('/api/emotions', emotionsRoute);
+app.use('/api/symptoms', symptomsRoute);
+app.use('/api/posts', postsRoute);
 app.use('/api/user', authRoute);
 
 app.get('/', (req, res) => {

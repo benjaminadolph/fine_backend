@@ -1,7 +1,23 @@
 const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
-  name: {
+  lastLogin: {
+    type: Date,
+    default: Date.now,
+  },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  gender: {
+    type: String,
+    required: true,
+  },
+  birthDate: {
     type: String,
     required: true,
   },
@@ -15,10 +31,22 @@ const UserSchema = mongoose.Schema({
     required: true,
     min: 6,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
+  modulesSelected: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ModulesSelected',
+  }],
+  emotions: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Emotions',
+  }],
+  symptoms: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Symptoms',
+  }],
+  symptomsCategories: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'SymptomsCategories',
+  }],
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Post',
