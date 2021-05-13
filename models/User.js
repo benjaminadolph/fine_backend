@@ -37,15 +37,15 @@ const UserSchema = mongoose.Schema({
   }],
   emotions: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Emotions',
+    ref: 'Emotion',
   }],
   symptoms: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Symptoms',
+    ref: 'Symptom',
   }],
   symptomsCategories: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'SymptomsCategories',
+    ref: 'SymptomCategory',
   }],
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
