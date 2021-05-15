@@ -4,15 +4,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const methodOverride = require('method-override');
+const Grid = require('gridfs-stream');
 
 dotenv.config();
-
-// Import Routes
-const postsRoute = require('./routes/posts');
-const authRoute = require('./routes/auth');
-const symptomCategoriesRoute = require('./routes/symptomCategories');
-const symptomsRoute = require('./routes/symptoms');
-const emotionsRoute = require('./routes/emotions');
 
 // CONNECT TO DB
 mongoose.Promise = global.Promise;
@@ -25,6 +20,20 @@ mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedT
     console.log(`Database could not be connected : ${error}`);
   });
 
+const conn = mongoose.connection;
+conn.once('open', () => {
+  // initialize stream to mongodb
+  const gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+});
+
+// Import Routes
+const postsRoute = require('./routes/posts');
+const authRoute = require('./routes/auth');
+const symptomCategoriesRoute = require('./routes/symptomCategories');
+const symptomsRoute = require('./routes/symptoms');
+const emotionsRoute = require('./routes/emotions');
+
 // Execute Express
 const app = express();
 
@@ -32,6 +41,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, '/public/')));
 
 // ROUTES MIDDLEWARE

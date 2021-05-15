@@ -4,7 +4,7 @@
 node_modules
 /dist
 _mongodb_data
-
+uploads
 
 # local env files
 .env.local
