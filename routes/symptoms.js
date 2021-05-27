@@ -81,16 +81,19 @@ router.post('/', verify, upload.single('symptomImage'), async (req, res) => {
 
 // Delete a specific symptom
 router.delete('/:symptomId', verify, async (req, res) => {
-  const symptom = req.query.symptomid;
+  const symptom = req.params.symptomId;
   const user = req.query.userid;
   try {
-    const removedSymptom = await Symptom.deleteOne({ _id: symptom });
-    // eslint-disable-next-line no-unused-vars
-    const updatedUser = await User.updateOne(
+    await Symptom.deleteOne({ _id: symptom });
+    await User.updateOne(
       { _id: user },
       { $pull: { symptoms: symptom } },
     );
-    res.json(removedSymptom);
+    await User.findOne({ _id: user })
+      .populate('symptoms')
+      .then((result) => {
+        res.json(result.symptoms);
+      });
   } catch (err) {
     res.json(err);
   }
@@ -98,25 +101,17 @@ router.delete('/:symptomId', verify, async (req, res) => {
 
 // Update a specific symptom
 router.patch('/:symptomId', verify, async (req, res) => {
+  const user = req.query.userid;
   try {
-    const updatedSymptom = await Symptom.updateOne(
+    await Symptom.updateOne(
       { _id: req.params.symptomId },
-      {
-        $set:
-        {
-          userid: req.body.userid,
-          date: req.body.date,
-          module: req.body.module,
-          intensity: req.body.intensity,
-          category: req.body.category,
-          location: req.body.location,
-          detailsText: req.body.description,
-          tags: req.body.tags,
-          // TODO: Fileupload
-        },
-      },
+      { $set: req.body },
     );
-    res.json(updatedSymptom);
+    await User.findOne({ _id: user })
+      .populate('symptoms')
+      .then((result) => {
+        res.json(result.symptoms);
+      });
   } catch (err) {
     res.json(err);
   }
