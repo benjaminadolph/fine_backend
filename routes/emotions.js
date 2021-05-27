@@ -35,12 +35,10 @@ const upload = multer({ storage });
 // Gets all Emotions
 router.get('/', verify, async (req, res) => {
   const id = req.query.userid;
-  console.log(id);
   try {
     User.findOne({ _id: id })
       .populate('emotions')
       .then((result) => {
-        // console.log(result);
         res.json(result.emotions);
       });
   } catch (err) {
@@ -84,16 +82,19 @@ router.post('/', verify, upload.single('emotionImage'), async (req, res) => {
 
 // Delete a specific Emotion
 router.delete('/:emotionId', verify, async (req, res) => {
-  const emotion = req.query.emotionid;
+  const emotion = req.params.emotionId;
   const user = req.query.userid;
   try {
-    const removedEmotion = await Emotion.deleteOne({ _id: emotion });
-    // eslint-disable-next-line no-unused-vars
-    const updatedUser = await User.updateOne(
+    await Emotion.deleteOne({ _id: emotion });
+    await User.updateOne(
       { _id: user },
       { $pull: { emotions: emotion } },
     );
-    res.json(removedEmotion);
+    await User.findOne({ _id: user })
+      .populate('emotions')
+      .then((result) => {
+        res.json(result.emotions);
+      });
   } catch (err) {
     res.json(err);
   }
@@ -101,23 +102,17 @@ router.delete('/:emotionId', verify, async (req, res) => {
 
 // Update a specific Emotion
 router.patch('/:emotionId', verify, async (req, res) => {
+  const user = req.query.userid;
   try {
-    const updatedEmotion = await Emotion.updateOne(
+    await Emotion.updateOne(
       { _id: req.params.emotionId },
-      {
-        $set:
-        {
-          userid: req.body.userid,
-          date: req.body.date,
-          module: req.body.module,
-          intensity: req.body.intensity,
-          title: req.body.title,
-          detailsText: req.body.description,
-          tags: req.body.tags,
-        },
-      },
+      { $set: req.body },
     );
-    res.json(updatedEmotion);
+    await User.findOne({ _id: user })
+      .populate('emotions')
+      .then((result) => {
+        res.json(result.emotions);
+      });
   } catch (err) {
     res.json(err);
   }
