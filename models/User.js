@@ -32,8 +32,7 @@ const UserSchema = mongoose.Schema({
     min: 6,
   },
   modulesSelected: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'ModulesSelected',
+    type: String,
   }],
   emotions: [{
     type: mongoose.Schema.Types.ObjectId,
