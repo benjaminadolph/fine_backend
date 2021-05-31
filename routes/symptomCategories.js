@@ -4,7 +4,7 @@ const User = require('../models/User');
 const verify = require('./verifyToken');
 
 const router = express.Router();
-const { symptomsCategoriesValidation } = require('../validation');
+/* const { symptomsCategoriesValidation } = require('../validation'); */
 
 // Gets all symptomCateories from User
 router.get('/', verify, async (req, res) => {
@@ -22,8 +22,8 @@ router.get('/', verify, async (req, res) => {
 
 // Submits a symptomCateory
 router.post('/', verify, async (req, res) => {
-  const { error } = symptomsCategoriesValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  /* const { error } = symptomsCategoriesValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message); */
 
   const symptomCategory = new SymptomCategory({
     userid: req.body.userid,
@@ -47,16 +47,19 @@ router.post('/', verify, async (req, res) => {
 
 // Delete a specific symptomCateory
 router.delete('/:symptomCategoryId', verify, async (req, res) => {
-  const symptomCategory = req.query.symptomCategoryid;
+  const symptomCategory = req.params.symptomCategoryId;
   const user = req.query.userid;
   try {
-    const removedSymptomCategory = await SymptomCategory.deleteOne({ _id: symptomCategory });
-    // eslint-disable-next-line no-unused-vars
-    const updatedUser = await User.updateOne(
+    await SymptomCategory.deleteOne({ _id: symptomCategory });
+    await User.updateOne(
       { _id: user },
       { $pull: { symptomsCategories: symptomCategory } },
     );
-    res.json(removedSymptomCategory);
+    await User.findOne({ _id: user })
+      .populate('symptomsCategories')
+      .then((result) => {
+        res.json(result.symptomsCategories);
+      });
   } catch (err) {
     res.json(err);
   }
@@ -64,18 +67,17 @@ router.delete('/:symptomCategoryId', verify, async (req, res) => {
 
 // Update a specific symptomCateory
 router.patch('/:symptomCategoryId', verify, async (req, res) => {
+  const user = req.query.userid;
   try {
-    const updatedSymptomCategory = await SymptomCategory.updateOne(
+    await SymptomCategory.updateOne(
       { _id: req.params.symptomCategoryId },
-      {
-        $set:
-        {
-          userid: req.body.userid,
-          title: req.body.title,
-        },
-      },
+      { $set: req.body },
     );
-    res.json(updatedSymptomCategory);
+    await User.findOne({ _id: user })
+      .populate('symptomsCategories')
+      .then((result) => {
+        res.json(result.symptomsCategories);
+      });
   } catch (err) {
     res.json(err);
   }

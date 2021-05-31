@@ -33,6 +33,7 @@ const authRoute = require('./routes/auth');
 const symptomCategoriesRoute = require('./routes/symptomCategories');
 const symptomsRoute = require('./routes/symptoms');
 const emotionsRoute = require('./routes/emotions');
+const userRoute = require('./routes/user');
 
 // Execute Express
 const app = express();
@@ -46,11 +47,12 @@ app.use(express.static(path.join(__dirname, '/public/')));
 
 // ROUTES MIDDLEWARE
 // function that executes when routes are being hit e.g. the Homepage "/"
+app.use('/api/auth', authRoute);
 app.use('/api/symptomCategories', symptomCategoriesRoute);
 app.use('/api/emotions', emotionsRoute);
+app.use('/api/user', userRoute);
 app.use('/api/symptoms', symptomsRoute);
 app.use('/api/posts', postsRoute);
-app.use('/api/user', authRoute);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
