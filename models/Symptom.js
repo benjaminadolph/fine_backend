@@ -26,6 +26,9 @@ const SymptomSchema = mongoose.Schema({
     required: true, */
   },
   location: {
+    front: {
+      type: Boolean,
+    },
     x: {
       type: Number,
     },
