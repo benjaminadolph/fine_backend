@@ -35,6 +35,9 @@ const SymptomSchema = mongoose.Schema({
     y: {
       type: Number,
     },
+    title: {
+      type: String,
+    }
   },
   photos: [{
     type: String,
