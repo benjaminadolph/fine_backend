@@ -18,7 +18,7 @@ const EmotionSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  emotions: {
+  emotion: {
     type: String,
   },
   photos: [{
