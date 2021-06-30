@@ -57,7 +57,7 @@ router.post('/', verify, upload.single('emotionImage'), async (req, res) => {
     date: req.body.date,
     module: req.body.module,
     intensity: req.body.intensity,
-    title: req.body.title,
+    emotion: req.body.emotion,
     detailsText: req.body.detailsText,
     tags: req.body.tags,
     // TODO: Fileupload
