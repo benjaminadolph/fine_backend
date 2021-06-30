@@ -18,9 +18,8 @@ const EmotionSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  title: {
+  emotions: {
     type: String,
-    required: true,
   },
   photos: [{
     type: String,
