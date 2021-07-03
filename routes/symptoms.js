@@ -1,8 +1,8 @@
 const express = require('express');
-const GridFsStorage = require('multer-gridfs-storage');
+/* const GridFsStorage = require('multer-gridfs-storage');
 const multer = require('multer');
 const path = require('path');
-const crypto = require('crypto');
+const crypto = require('crypto'); */
 const Symptom = require('../models/Symptom');
 const User = require('../models/User');
 const verify = require('./verifyToken');
@@ -10,7 +10,9 @@ const verify = require('./verifyToken');
 const router = express.Router();
 
 // Create storage engine
-const storage = new GridFsStorage({
+/* const storage = new GridFsStorage({
+  // use process.env.DB_CONNECTION instead of process.env.DOCKER_DB_CONNECTION
+  // when using a mongodb hostet on e.g. MongoDB Atlas and change the Link in .env-File
   url: process.env.DB_CONNECTION,
   file: (req, file) => new Promise((resolve, reject) => {
     crypto.randomBytes(16, (err, buf) => {
@@ -26,7 +28,7 @@ const storage = new GridFsStorage({
     });
   }),
 });
-const upload = multer({ storage });
+const upload = multer({ storage }); */
 
 // IMPORT VALIDATIONS
 /* const { symptomsValidation } = require('../validation'); */
@@ -46,7 +48,7 @@ router.get('/', verify, async (req, res) => {
 });
 
 // Submits a symptom
-router.post('/', verify, upload.single('symptomImage'), async (req, res) => {
+router.post('/', verify, /* upload.single('symptomImage'), */ async (req, res) => {
 /*   const { error } = symptomsValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message); */
 

@@ -1,8 +1,8 @@
 const express = require('express');
-const multer = require('multer');
+/* const multer = require('multer');
 const path = require('path');
 const GridFsStorage = require('multer-gridfs-storage');
-const crypto = require('crypto');
+const crypto = require('crypto'); */
 const Emotion = require('../models/Emotion');
 const User = require('../models/User');
 const verify = require('./verifyToken');
@@ -10,7 +10,7 @@ const verify = require('./verifyToken');
 const router = express.Router();
 
 // Create storage engine
-const storage = new GridFsStorage({
+/* const storage = new GridFsStorage({
   url: process.env.DB_CONNECTION,
   file: (req, file) => new Promise((resolve, reject) => {
     crypto.randomBytes(16, (err, buf) => {
@@ -26,7 +26,7 @@ const storage = new GridFsStorage({
     });
   }),
 });
-const upload = multer({ storage });
+const upload = multer({ storage }); */
 
 // IMPORT VALIDATIONS
 // TODO: ADD VALIDATION
@@ -47,7 +47,7 @@ router.get('/', verify, async (req, res) => {
 });
 
 // Submits a Emotion
-router.post('/', verify, upload.single('emotionImage'), async (req, res) => {
+router.post('/', verify, /* upload.single('emotionImage'), */ async (req, res) => {
   // TODO: ADD VALIDATION
   /* const { error } = emotionsValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message); */

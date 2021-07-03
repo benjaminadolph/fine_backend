@@ -11,7 +11,13 @@ dotenv.config();
 
 // CONNECT TO DB
 mongoose.Promise = global.Promise;
-// use process.env.DB_CONNECTION instead of 'mongodb://user1:test123@mongo:27017/fine_mongodb' when using a mongodb hostet on e.g. MongoDB Atlas and change the Link in .env-File
+/** ******
+use process.env.DB_CONNECTION instead of process.env.DOCKER_DB_CONNECTION
+when using a mongodb hostet on e.g. MongoDB Atlas and change the Link in .env-File
+IMPORTANT: You also have to change it in the symptoms.js and emotions.js files in line 16
+otherwise the server will crash
+********* */
+// eslint-disable-next-line max-len
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Database connected sucessfully !');
