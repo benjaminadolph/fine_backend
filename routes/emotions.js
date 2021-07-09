@@ -80,6 +80,25 @@ router.post('/', verify, /* upload.single('emotionImage'), */ async (req, res) =
   }
 });
 
+// Get back the last Emotion Entry
+router.get('/lastEmotionEntry', verify, async (req, res) => {
+  const id = req.query.userid;
+  let emotionId;
+  try {
+    await User.findOne({ _id: id })
+      .select({ emotions: { $slice: -1 } })
+      .then((result) => {
+        emotionId = result.emotions.toString();
+      });
+    await Emotion.findById(emotionId)
+      .then((result) => {
+        res.json(result);
+      });
+  } catch (err) {
+    res.json(err);
+  }
+});
+
 // Delete a specific Emotion
 router.delete('/:emotionId', verify, async (req, res) => {
   const emotion = req.params.emotionId;

@@ -81,6 +81,25 @@ router.post('/', verify, /* upload.single('symptomImage'), */ async (req, res) =
   }
 });
 
+// Get back the last Symptom Entry
+router.get('/lastSymptomEntry', verify, async (req, res) => {
+  const id = req.query.userid;
+  let symptomId;
+  try {
+    await User.findOne({ _id: id })
+      .select({ symptoms: { $slice: -1 } })
+      .then((result) => {
+        symptomId = result.symptoms.toString();
+      });
+    await Symptom.findById(symptomId)
+      .then((result) => {
+        res.json(result);
+      });
+  } catch (err) {
+    res.json(err);
+  }
+});
+
 // Delete a specific symptom
 router.delete('/:symptomId', verify, async (req, res) => {
   const symptom = req.params.symptomId;
